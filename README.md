@@ -1,172 +1,322 @@
-# Phase 3 CLI+ORM Project Template
+# Event Planner CLI
 
-## Learning Goals
+A comprehensive command-line interface application for managing events, attendees, and activities. Built with Python, SQLAlchemy ORM, and designed with user experience in mind.
 
-- Discuss the basic directory structure of a CLI.
-- Outline the first steps in building a CLI.
+## 🎯 Overview
 
----
+Event Planner CLI is a professional-grade event management system that allows event planners to efficiently organize events, manage attendee lists, schedule activities, and track budgets. The application features an intuitive menu-driven interface that hides technical complexity while providing powerful functionality.
 
-## Introduction
+## ✨ Features
 
-You now have a basic idea of what constitutes a CLI. Fork and clone this lesson
-for a project template for your CLI.
+### 📅 Event Management
+- Create, view, update, and delete events
+- Track event details: name, description, date, location, budget, status
+- View comprehensive event summaries with attendee and activity counts
+- Search events by name
+- Budget tracking and over-budget warnings
 
-Take a look at the directory structure:
+### 👥 Attendee Management
+- Add attendees to specific events with context-aware navigation
+- Manage RSVP status (Pending, Confirmed, Declined)
+- Track contact information and dietary restrictions
+- Email validation and duplicate prevention
+- View attendee lists organized by event
 
-```console
-.
-├── Pipfile
-├── Pipfile.lock
-├── README.md
-└── lib
-    ├── models
-    │   ├── __init__.py
-    │   └── model_1.py
-    ├── cli.py
-    ├── debug.py
-    └── helpers.py
+### 🎯 Activity Management
+- Schedule activities with start times and duration
+- Cost tracking for budget management
+- Maximum participant limits
+- Automatic time conflict detection
+- Activity scheduling within event context
+
+### 📊 Dashboard & Reporting
+- Real-time dashboard with event statistics
+- Upcoming events overview
+- Budget analysis and over-budget alerts
+- Detailed event reports with financial summaries
+- Attendee breakdown by RSVP status
+- Dietary restrictions summary for catering
+
+## 🏗️ Project Structure
+
+```
+event-planner-cli/
+├── Pipfile                 # Python dependencies
+├── Pipfile.lock           # Locked dependencies
+├── README.md              # Project documentation
+└── lib/
+    ├── models/
+    │   ├── __init__.py    # Database configuration
+    │   ├── event.py       # Event model with ORM methods
+    │   ├── attendee.py    # Attendee model with validation
+    │   └── activity.py    # Activity model with conflict detection
+    ├── cli.py             # Main CLI interface
+    ├── helpers.py         # Helper functions and business logic
+    └── debug.py           # Debug utilities and sample data
 ```
 
-Note: The directory also includes two files named `CONTRIBUTING.md` and
-`LICENSE.md` that are specific to Flatiron's curriculum. You can disregard or
-delete the files if you want.
+## 🚀 Installation
 
----
+### Prerequisites
+- Python 3.8 or higher
+- Pipenv (for dependency management)
 
-## Generating Your Environment
+### Setup Instructions
 
-You might have noticed in the file structure- there's already a Pipfile!
+1. **Clone the repository**
+   ```bash
+   git clone <your-repository-url>
+   cd event-planner-cli
+   ```
 
-Install any additional dependencies you know you'll need for your project by
-adding them to the `Pipfile`. Then run the commands:
+2. **Install dependencies**
+   ```bash
+   pipenv install
+   ```
 
-```console
-pipenv install
-pipenv shell
+3. **Activate virtual environment**
+   ```bash
+   pipenv shell
+   ```
+
+4. **Run the application**
+   ```bash
+   python lib/cli.py
+   ```
+
+### Optional: Create Sample Data
+
+To populate the database with sample events, attendees, and activities for testing:
+
+```bash
+python lib/debug.py
+# Select option 1 to initialize database
+# Select option 3 to create sample data
 ```
 
----
+## 💻 Usage
 
-## Generating Your CLI
+### Starting the Application
 
-A CLI is, simply put, an interactive script and prompts the user and performs
-operations based on user input.
-
-The project template has a sample CLI in `lib/cli.py` that looks like this:
-
-```py
-# lib/cli.py
-
-from helpers import (
-    exit_program,
-    helper_1
-)
-
-
-def main():
-    while True:
-        menu()
-        choice = input("> ")
-        if choice == "0":
-            exit_program()
-        elif choice == "1":
-            helper_1()
-        else:
-            print("Invalid choice")
-
-
-def menu():
-    print("Please select an option:")
-    print("0. Exit the program")
-    print("1. Some useful function")
-
-
-if __name__ == "__main__":
-    main()
+Run the main CLI application:
+```bash
+python lib/cli.py
 ```
 
-The helper functions are located in `lib/helpers.py`:
+You'll be greeted with the main menu offering six primary functions:
 
-```py
-# lib/helpers.py
+1. **📅 Manage Events** - Create, view, and delete events
+2. **👥 Manage Attendees** - Add and manage event attendees
+3. **🎯 Manage Activities** - Schedule and organize event activities
+4. **📊 Event Dashboard** - View statistics and upcoming events
+5. **🔍 Search Events** - Find events by name
+6. **📋 Generate Event Report** - Create detailed event reports
 
-def helper_1():
-    print("Performing useful function#1.")
+### User Experience Highlights
 
+**Context-Aware Navigation**: When viewing a specific event, you can add attendees or activities directly to that event without re-selecting it.
 
-def exit_program():
-    print("Goodbye!")
-    exit()
+**Input Validation**: The system validates all input including:
+- Email format validation
+- Date and time format checking
+- Budget and cost validation (no negative values)
+- RSVP status validation
+
+**Smart Features**:
+- Automatic time conflict detection for activities
+- Budget tracking with over-budget warnings
+- Attendee count tracking by RSVP status
+- Dietary restrictions compilation for catering
+
+### Sample Workflow
+
+1. **Create an Event**
+   - Navigate to "Manage Events" → "Create New Event"
+   - Enter event details (name, date, location, budget)
+   - System creates event and returns to menu
+
+2. **Add Attendees**
+   - Navigate to "Manage Attendees" → "Add New Attendee"
+   - Select the event from the list
+   - Enter attendee information with automatic email validation
+   - Set initial RSVP status
+
+3. **Schedule Activities**
+   - Navigate to "Manage Activities" → "Add New Activity"
+   - Select the target event
+   - Schedule activity with automatic conflict detection
+   - System warns if activity exceeds remaining budget
+
+4. **Monitor Progress**
+   - Use "Event Dashboard" for overall statistics
+   - Generate detailed reports for specific events
+   - Track confirmed attendees and budget utilization
+
+## 🏛️ Database Schema
+
+### Tables and Relationships
+
+**Events** (Primary Entity)
+- `id` (Primary Key)
+- `name`, `description`, `date`, `location`
+- `budget`, `status`
+
+**Attendees** (One-to-Many with Events)
+- `id` (Primary Key)
+- `name`, `email`, `phone`
+- `rsvp_status`, `dietary_restrictions`
+- `event_id` (Foreign Key → Events)
+
+**Activities** (One-to-Many with Events)
+- `id` (Primary Key)
+- `name`, `description`, `start_time`, `duration`
+- `cost`, `max_participants`
+- `event_id` (Foreign Key → Events)
+
+### Data Relationships
+- Each Event can have multiple Attendees and Activities
+- Each Attendee belongs to exactly one Event
+- Each Activity belongs to exactly one Event
+- Cascade deletion: Deleting an Event removes all associated Attendees and Activities
+
+## 🔧 Technical Implementation
+
+### Models (`lib/models/`)
+
+**`event.py`** - Event Model
+- Implements full CRUD operations (Create, Read, Update, Delete)
+- Property validation for name, location, and budget
+- Business logic methods: `get_attendee_count()`, `get_total_activity_cost()`, `get_budget_remaining()`
+- Search functionality by name and ID
+
+**`attendee.py`** - Attendee Model  
+- Email format validation using regex
+- RSVP status validation (Pending, Confirmed, Declined)
+- Relationship management with Events
+- Search capabilities by name, email, and event association
+
+**`activity.py`** - Activity Model
+- Time and duration validation
+- Cost and participant limit management
+- Time conflict detection between activities
+- Integration with Event budget tracking
+
+### CLI Interface (`lib/cli.py`)
+
+The CLI follows a hierarchical menu structure:
+- **Main Menu**: Primary navigation hub
+- **Management Submenus**: Focused workflows for Events, Attendees, and Activities
+- **Context Preservation**: Users stay within relevant contexts (e.g., when managing attendees for a specific event)
+
+Key design principles:
+- **User-Centric**: Hides database IDs and technical details from users
+- **Error Handling**: Graceful handling of invalid input with helpful error messages
+- **Confirmation Prompts**: Prevents accidental deletions with confirmation dialogs
+
+### Helper Functions (`lib/helpers.py`)
+
+**Utility Functions**:
+- `clear_screen()`: Cross-platform screen clearing
+- `print_header()`: Consistent formatting for section headers
+- `get_input()`: Validated input collection with type conversion
+- `confirm_action()`: User confirmation for destructive operations
+
+**Business Logic Functions**:
+- Event management: Create, view, delete events with full validation
+- Attendee management: Context-aware attendee handling
+- Activity management: Scheduling with conflict detection
+- Dashboard and reporting: Statistical analysis and report generation
+
+### Debug Utilities (`lib/debug.py`)
+
+Development and testing support:
+- Database initialization and cleanup
+- Sample data generation for testing
+- ORM method testing
+- Database statistics and health checks
+
+## 🎨 User Experience Design
+
+### Design Philosophy
+- **Hide Complexity**: Users never see database IDs, raw objects, or technical errors
+- **Contextual Actions**: When browsing desserts, you can add a dessert recipe without re-selecting the category
+- **Informative Feedback**: Clear success/error messages with actionable guidance
+- **Professional Formatting**: Clean tables and headers for easy reading
+
+### Data Structures Used
+- **Lists**: Event collections, attendee lists, activity schedules
+- **Dictionaries**: RSVP status counts, dietary restriction summaries, validation mappings
+- **Tuples**: Time conflict pairs, coordinate data for reports
+
+### Input Validation Strategy
+- **Progressive Validation**: Check format, then business rules, then constraints
+- **Helpful Error Messages**: Specific guidance rather than generic "Invalid input"
+- **Graceful Degradation**: Allow partial completion and provide defaults where appropriate
+
+## 🧪 Testing
+
+### Manual Testing Approach
+The application is designed for comprehensive manual testing through the CLI interface:
+
+1. **Data Validation Testing**
+   - Enter invalid emails, negative budgets, malformed dates
+   - Verify appropriate error messages and recovery
+
+2. **Business Logic Testing**
+   - Create time conflicts between activities
+   - Exceed event budgets with activities
+   - Test cascade deletions
+
+3. **User Experience Testing**
+   - Navigate through complete workflows
+   - Test context preservation and menu navigation
+   - Verify report accuracy and formatting
+
+### Using Debug Mode
+```bash
+python lib/debug.py
 ```
+Use debug mode to:
+- Create comprehensive test data
+- Verify ORM relationships
+- Test edge cases and error conditions
 
-You can run the template CLI with `python lib/cli.py`, or include the shebang
-and make it executable with `chmod +x`. The template CLI will ask for input, do
-some work, and accomplish some sort of task.
+## 🤝 Contributing
 
-Past that, CLIs can be whatever you'd like, as long as you follow the project
-requirements.
+### Development Setup
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make changes following the established patterns
+4. Test thoroughly using the CLI and debug utilities
+5. Submit a pull request
 
-Of course, you will update `lib/cli.py` with prompts that are appropriate for
-your application, and you will update `lib/helpers.py` to replace `helper_1()`
-with a useful function based on the specific problem domain you decide to
-implement, along with adding other helper functions to the module.
+### Code Style Guidelines
+- Follow PEP 8 Python style guidelines
+- Use descriptive variable and function names
+- Include docstrings for all functions and classes
+- Maintain separation of concerns between models, CLI, and helpers
 
-In the `lib/models` folder, you should rename `model_1.py` with the name of a
-data model class from your specific problem domain, and add other classes to the
-folder as needed. The file `lib/models/__init__.py` has been initialized to
-create the necessary database constants. You need to add import statements to
-the various data model classes in order to use the database constants.
+### Adding New Features
+When adding new functionality:
+1. Update the appropriate model with new ORM methods
+2. Add helper functions for business logic
+3. Integrate into the CLI menu system
+4. Update this README with new feature documentation
+5. Add relevant test cases to debug utilities
 
-You are also welcome to implement a different module and directory structure.
-However, your project should be well organized, modular, and follow the design
-principal of separation of concerns, which means you should separate code
-related to:
+## 📄 License
 
-- User interface
-- Data persistence
-- Problem domain rules and logic
+This project is licensed under the MIT License - see the LICENSE file for details.
 
----
+## 🙏 Acknowledgments
 
-## Updating README.md
-
-`README.md` is a Markdown file that should describe your project. You will
-replace the contents of this `README.md` file with a description of **your**
-actual project.
-
-Markdown is not a language that we cover in Flatiron's Software Engineering
-curriculum, but it's not a particularly difficult language to learn (if you've
-ever left a comment on Reddit, you might already know the basics). Refer to the
-cheat sheet in this assignments's resources for a basic guide to Markdown.
-
-### What Goes into a README?
-
-This README serves as a template. Replace the contents of this file to describe
-the important files in your project and describe what they do. Each Python file
-that you edit should get at least a paragraph, and each function should be
-described with a sentence or two.
-
-Describe your actual CLI script first, and with a good level of detail. The rest
-should be ordered by importance to the user. (Probably functions next, then
-models.)
-
-Screenshots and links to resources that you used throughout are also useful to
-users and collaborators, but a little more syntactically complicated. Only add
-these in if you're feeling comfortable with Markdown.
+Built as part of the Flatiron School Phase 3 curriculum, demonstrating:
+- Python fundamentals and object-oriented programming
+- SQLAlchemy ORM with complex relationships
+- CLI design and user experience principles
+- Database design and management
+- Professional code organization and documentation
 
 ---
 
-## Conclusion
-
-A lot of work goes into a good CLI, but it all relies on concepts that you've
-practiced quite a bit by now. Hopefully this template and guide will get you off
-to a good start with your Phase 3 Project.
-
-Happy coding!
-
----
-
-## Resources
-
-- [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/)
+*Event Planner CLI - Making event management simple and efficient.*
